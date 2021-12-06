@@ -1,0 +1,95 @@
+DATABASE_HOST: localhost
+PORT: 8080
+
+server:
+  port: ${PORT}
+  servlet:
+    contextPath: /
+  error:
+    include-message: always
+    include-binding-errors: always
+    whitelabel:
+      enabled: false
+
+spring:
+  application:
+    profiles.active: local
+    name: base-common
+  datasource:
+    url: jdbc:postgresql://${DATABASE_HOST}:5432/common_database
+    username: root
+    password: root
+    hikari:
+      maximum-pool-size: 50
+  jpa:
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        default-schema: public
+        format_sql: true
+  liquibase:
+    enabled: true
+    change-log: classpath:db/db.changelog-master.xml
+    default-schema: public
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+logging:
+  level:
+    org:
+      springframework: DEBUG
+      hibernate:
+        SQL: TRACE
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+
+org:
+  springframework:
+    web:
+      servlet:
+        mvc:
+          method:
+            annotation: TRACE
+
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger
+
+
+jwt:
+  app:
+    jwtSecret: mySecretKey123
+    jwtExpirationMs: 10800000 #3h
+basestarter:
+  backendurl: localhost:8080
+
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    httptrace:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+logback:
+  rootloglevel: INFO
+  askidaloglevel: DEBUG
